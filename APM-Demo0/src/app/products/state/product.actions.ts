@@ -74,7 +74,7 @@ export class CreateProductSuccess implements Action {
 
 export class CreateProductFail implements Action {
   readonly type = ProductActionTypes.CreateFail;
-  constructor(public payload: Product) { }
+  constructor(public payload: string) { }
 }
 
 export class DeleteProduct implements Action {
