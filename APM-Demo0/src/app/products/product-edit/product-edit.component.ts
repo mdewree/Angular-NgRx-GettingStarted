@@ -27,7 +27,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<fromProduct.State>,
     private fb: FormBuilder,
-              private productService: ProductService) {
+    private productService: ProductService) {
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -53,8 +53,8 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.productForm = this.fb.group({
       productName: ['', [Validators.required,
-                         Validators.minLength(3),
-                         Validators.maxLength(50)]],
+      Validators.minLength(3),
+      Validators.maxLength(50)]],
       productCode: ['', Validators.required],
       starRating: ['', NumberValidators.range(1, 5)],
       description: ''
@@ -115,30 +115,21 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   deleteProduct(): void {
     if (this.product && this.product.id) {
       if (confirm(`Really delete the product: ${this.product.productName}?`)) {
-        this.productService.deleteProduct(this.product.id).subscribe(
-          () => this.store.dispatch(new productActions.ClearCurrentProduct()),
-          (err: any) => this.errorMessage = err.error
-        );
+        this.store.dispatch(new productActions.DeleteProduct(this.product.id));
       }
     } else {
       // No need to delete, it was never saved
-      this.productService.changeSelectedProduct(null);
+      this.store.dispatch(new productActions.ClearCurrentProduct());
     }
   }
 
   saveProduct(): void {
     if (this.productForm.valid) {
       if (this.productForm.dirty) {
-        // Copy over all of the original product properties
-        // Then copy over the values from the form
-        // This ensures values not on the form, such as the Id, are retained
         const p = { ...this.product, ...this.productForm.value };
 
         if (p.id === 0) {
-          this.productService.createProduct(p).subscribe(
-            product => this.store.dispatch(new productActions.SetCurrentProduct(product)),
-            (err: any) => this.errorMessage = err.error
-          );
+          this.store.dispatch(new productActions.CreateProduct(p));
         } else {
           this.store.dispatch(new productActions.UpdateProduct(p));
         }
