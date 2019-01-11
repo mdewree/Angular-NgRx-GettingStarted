@@ -8,7 +8,10 @@ export enum ProductActionTypes {
   InitializeCurrentProduct = '[Product] Initialize Current Product',
   Load = '[Product] Load',
   LoadSuccess = '[Product] Load Success',
-  LoadFail = '[Product] Load Fail'
+  LoadFail = '[Product] Load Fail',
+  Update = '[Product] Update',
+  UpdateSuccess = '[Product] Update Success',
+  UpdateFail = '[Product] Update Fail'
 }
 
 export class ToggleProductCode implements Action {
@@ -38,10 +41,28 @@ export class LoadFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class UpdateProduct implements Action {
+  readonly type = ProductActionTypes.Update;
+  constructor(public payload: Product) { }
+}
+
+export class UpdateProductSuccess implements Action {
+  readonly type = ProductActionTypes.UpdateSuccess;
+  constructor(public payload: Product) { }
+}
+
+export class UpdateProductFail implements Action {
+  readonly type = ProductActionTypes.UpdateFail;
+  constructor(public payload: string) { }
+}
+
 export type ProductActions = ToggleProductCode
   | SetCurrentProduct
   | ClearCurrentProduct
   | InitializeCurrentProduct
   | LoadFail
   | LoadSuccess
-  | Load;
+  | Load
+  | UpdateProduct
+  | UpdateProductSuccess
+  | UpdateProductFail;
